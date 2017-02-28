@@ -9,7 +9,7 @@
 Technology stack:
 - nginx
 - mongodb
-- php7
+- php7 + laravel
 - docker
 
 
