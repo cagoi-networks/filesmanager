@@ -16,6 +16,13 @@
         $trans['adminlte_lang_message'] = trans('adminlte_lang::message');
         echo json_encode($trans);
     @endphp
+
+    const op = XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open = function() {
+        const resp = op.apply(this, arguments);
+        this.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+        return resp;
+    };
 </script>
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -24,4 +31,5 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 <script src="{{ mix('/js/app.js') }}" type="text/javascript"></script>
+<script src="{{ asset('/js/fileUploader.js') }}" type="text/javascript"></script>
 

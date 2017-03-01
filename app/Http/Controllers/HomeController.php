@@ -8,6 +8,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
+use App\Models\File;
 use Illuminate\Http\Request;
 
 /**
@@ -33,6 +34,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('adminlte::home');
+        $files = File::paginate(10);
+        return view('adminlte::home',['files' => $files]);
     }
 }

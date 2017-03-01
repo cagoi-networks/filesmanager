@@ -15,7 +15,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('service/{id}/auth', 'ServiceController@service');
+
+Route::post('upload', 'UploadController@index');
+
+Route::get('files/{id}', 'FileController@show')->name('files.show');
+
 Route::group(['middleware' => 'auth'], function () {
+
+    Route::get('home', 'HomeController@index');
 
     //Please do not remove this if you want adminlte:route and adminlte:link commands to works correctly.
     #adminlte_routes

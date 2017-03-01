@@ -20,6 +20,7 @@ mix.js('resources/assets/js/app.js', 'public/js')
        'node_modules/admin-lte/dist/css/skins/_all-skins.css',
        'public/css/adminlte-app.css',
        'public/plugins/iCheck/square/blue.css',
-       'public/css/toastr.css'
+       'public/css/toastr.css',
+       'node_modules/uppy/dist/uppy.css',
    ], 'public/css/all.css');
 
