@@ -13,6 +13,7 @@ class FileController extends Controller
     {
         $file = File::findOrFail($id);
 
+        // Getting of converted file
         if($conversion)
         {
             $convertedFile = Conversions::getConvertedFile($file, $conversion);
@@ -24,13 +25,14 @@ class FileController extends Controller
             }
         }
 
-        // Get conversion result
+        // Conversion
         $imageConverting = new ImageConverting($file, [
-            'crop' => [ 100,100 ],
-            'rotate' => [ -45 ]
+            'crop' => [ 170,100 ],
+            'rotate' => [ 90 ]
 
         ]);
         $imageConverting->process();
+
         $path = $file->getPath();
         return Response::make($path)->header('Content-Type', $file->mime_type);
     }

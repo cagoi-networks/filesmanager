@@ -26,7 +26,8 @@ class File extends Model
         $data['extension'] = $file->getClientOriginalExtension();
         $data['mime_type'] = $file->getClientMimeType();
         $data['size'] = $file->getClientSize();
-        if($row = $this->create($data)){
+        if($row = $this->create($data))
+        {
             Storage::putFileAs(
                 $this->storagePath, $file, $row->id
             );

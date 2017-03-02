@@ -31,14 +31,14 @@ class ImageConverting{
                     $this->converted_file = Image::make($image)->$conversion_type(
                         isset($arguments[0]) ? $arguments[0] : null,
                         isset($arguments[1]) ? $arguments[1] : null,
-                        isset($arguments[2]) ? $arguments[1] : null,
-                        isset($arguments[3]) ? $arguments[1] : null,
-                        isset($arguments[4]) ? $arguments[1] : null,
-                        isset($arguments[5]) ? $arguments[1] : null,
-                        isset($arguments[6]) ? $arguments[1] : null,
-                        isset($arguments[7]) ? $arguments[1] : null,
-                        isset($arguments[8]) ? $arguments[1] : null,
-                        isset($arguments[9]) ? $arguments[1] : null
+                        isset($arguments[2]) ? $arguments[2] : null,
+                        isset($arguments[3]) ? $arguments[3] : null,
+                        isset($arguments[4]) ? $arguments[4] : null,
+                        isset($arguments[5]) ? $arguments[5] : null,
+                        isset($arguments[6]) ? $arguments[6] : null,
+                        isset($arguments[7]) ? $arguments[7] : null,
+                        isset($arguments[8]) ? $arguments[8] : null,
+                        isset($arguments[9]) ? $arguments[9] : null
                     );
                 }
                 $image = $conversions->saveResult($this->converted_file, $this->file, $conversion_type);
@@ -49,10 +49,8 @@ class ImageConverting{
 
     private function _validate($file)
     {
-
         if (in_array($file->extension, $this->mimes))
           return true;
-
         return false;
     }
 }
