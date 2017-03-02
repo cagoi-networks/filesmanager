@@ -197,6 +197,11 @@ return [
          */
         Jenssegers\Mongodb\MongodbServiceProvider::class,
 
+        /*
+         * Image Intervention
+         */
+        Intervention\Image\ImageServiceProvider::class
+
     ],
 
     /*
@@ -261,6 +266,11 @@ return [
          * Laravel Flysystem
          */
         'Flysystem' => GrahamCampbell\Flysystem\Facades\Flysystem::class,
+
+        /*
+         * Image Intervention
+         */
+        'Image' => Intervention\Image\Facades\Image::class
 
     ],
 

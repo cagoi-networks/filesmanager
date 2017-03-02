@@ -14,6 +14,11 @@ class File extends Model
 
     protected $storagePath = 'uploads';
 
+    public function conversions()
+    {
+        return $this->hasMany(Conversions::class);
+    }
+
     public function upload($file)
     {
         $data = array();

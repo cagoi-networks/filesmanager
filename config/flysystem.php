@@ -22,7 +22,7 @@ return [
     |
     */
 
-    'default' => 'local',
+    'default' => 'gridfs',
 
     /*
     |--------------------------------------------------------------------------
@@ -109,7 +109,7 @@ return [
         'gridfs' => [
             'driver'     => 'gridfs',
             'server'     => 'mongodb://localhost:27017',
-            'database'   => 'your-database',
+            'database'   => 'filesmanager',
             // 'visibility' => 'public',
             // 'pirate'     => false,
             // 'eventable'  => true,

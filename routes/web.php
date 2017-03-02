@@ -19,7 +19,7 @@ Route::get('service/{id}/auth', 'ServiceController@service');
 
 Route::post('upload', 'UploadController@index');
 
-Route::get('files/{id}', 'FileController@show')->name('files.show');
+Route::get('files/{id}/{conversion?}', 'FileController@show')->name('files.show');
 
 Route::group(['middleware' => 'auth'], function () {
 
