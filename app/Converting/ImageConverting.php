@@ -26,23 +26,29 @@ class ImageConverting{
             $image = $this->file->getPath();
             foreach ($this->conversions as $conversion_type => $arguments)
             {
-                if($image)
+                // The check on the already converted file
+                if(!$this->file->hasConvert($conversion_type, $arguments))
                 {
-                    $this->converted_file = Image::make($image)->$conversion_type(
-                        isset($arguments[0]) ? $arguments[0] : null,
-                        isset($arguments[1]) ? $arguments[1] : null,
-                        isset($arguments[2]) ? $arguments[2] : null,
-                        isset($arguments[3]) ? $arguments[3] : null,
-                        isset($arguments[4]) ? $arguments[4] : null,
-                        isset($arguments[5]) ? $arguments[5] : null,
-                        isset($arguments[6]) ? $arguments[6] : null,
-                        isset($arguments[7]) ? $arguments[7] : null,
-                        isset($arguments[8]) ? $arguments[8] : null,
-                        isset($arguments[9]) ? $arguments[9] : null
-                    );
+                    $arg = explode('x',$arguments);
+                    if($image)
+                    {
+                        $this->converted_file = Image::make($image)->$conversion_type(
+                            isset($arg[0]) ? $arg[0] : null,
+                            isset($arg[1]) ? $arg[1] : null,
+                            isset($arg[2]) ? $arg[2] : null,
+                            isset($arg[3]) ? $arg[3] : null,
+                            isset($arg[4]) ? $arg[4] : null,
+                            isset($arg[5]) ? $arg[5] : null,
+                            isset($arg[6]) ? $arg[6] : null,
+                            isset($arg[7]) ? $arg[7] : null,
+                            isset($arg[8]) ? $arg[8] : null,
+                            isset($arg[9]) ? $arg[9] : null
+                        );
+                    }
+                    $image = $conversions->saveResult($this->converted_file, $this->file, $conversion_type, $arguments);
                 }
-                $image = $conversions->saveResult($this->converted_file, $this->file, $conversion_type);
             }
+            return true;
         }
         return false;
     }

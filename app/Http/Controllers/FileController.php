@@ -9,29 +9,29 @@ use Illuminate\Support\Facades\Response;
 
 class FileController extends Controller
 {
-    public function show($id, $conversion = null)
+    public function show($id, $conversion = null, $arguments = null)
     {
         $file = File::findOrFail($id);
 
         // Getting of converted file
         if($conversion)
         {
-            $convertedFile = Conversions::getConvertedFile($file, $conversion);
+            // Conversion
+            $imageConverting = new ImageConverting($file, [
+                $conversion => $arguments
+            ]);
 
-            if($convertedFile)
-            {
-                $path = $convertedFile->getPath();
-                return Response::make($path)->header('Content-Type', $file->mime_type);
+            // Get converted file and show
+            if($imageConverting->process()){
+                $convertedFile = Conversions::getConvertedFile($file, $conversion);
+
+                if($convertedFile)
+                {
+                    $path = $convertedFile->getPath();
+                    return Response::make($path)->header('Content-Type', $file->mime_type);
+                }
             }
         }
-
-        // Conversion
-        $imageConverting = new ImageConverting($file, [
-            'crop' => [ 170,100 ],
-            'rotate' => [ 90 ]
-
-        ]);
-        $imageConverting->process();
 
         $path = $file->getPath();
         return Response::make($path)->header('Content-Type', $file->mime_type);

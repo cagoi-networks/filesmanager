@@ -9,15 +9,16 @@ class Conversions extends Model
 {
     protected $table = 'conversions';
 
-    protected $fillable = ['file_id', 'type'];
+    protected $fillable = ['file_id', 'type', 'arguments'];
 
     protected $storagePath = 'app/conversions';
 
-    public function saveResult($converted_file, $file, $conversion_type)
+    public function saveResult($converted_file, $file, $conversion_type, $arguments)
     {
         $data = array();
         $data ['file_id'] = $file->id;
         $data['type'] = $conversion_type;
+        $data['arguments'] = $arguments;
         if($row = $this->create($data))
         {
             $converted_file->save(storage_path($this->storagePath.'/'.$row->id));

@@ -41,5 +41,13 @@ class File extends Model
         return FileFacade::get(storage_path('app/'.$this->storagePath.'/'.$this->id));
     }
 
+    public function hasConvert($type, $arguments)
+    {
+        $items = $this->conversions()->where('type', $type)->where('arguments', $arguments)->first();
+        if($items)
+            return true;
+        return false;
+    }
+
 
 }

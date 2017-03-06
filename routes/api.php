@@ -18,8 +18,21 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:api');
 
 Route::group(['prefix' => 'v1','middleware' => 'auth:api'], function () {
+
     //    Route::resource('task', 'TasksController');
 
     //Please do not remove this if you want adminlte:route and adminlte:link commands to works correctly.
     #adminlte_api_routes
 });
+
+
+Route::get('service/{id}/auth', 'ServiceController@service');
+
+Route::get('service/connect/{drive}', 'ServiceController@connect');
+
+Route::post('upload', 'UploadController@index');
+
+Route::get('files/{id}/{conversion?}', 'FileController@show')->name('files.show');
+
+
+

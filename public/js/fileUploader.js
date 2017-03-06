@@ -69,7 +69,7 @@ function uppyInit () {
 
     uppy.on('core:success', (fileCount) => {
         console.log('Yo, uploaded: ' + fileCount)
-    })
+    });
 }
 
 uppyInit();

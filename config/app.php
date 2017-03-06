@@ -200,7 +200,17 @@ return [
         /*
          * Image Intervention
          */
-        Intervention\Image\ImageServiceProvider::class
+        Intervention\Image\ImageServiceProvider::class,
+
+        /*
+         * Socialite
+         */
+        SocialiteProviders\Manager\ServiceProvider::class,
+
+        /*
+        * Cors
+        */
+        Barryvdh\Cors\ServiceProvider::class,
 
     ],
 
@@ -270,7 +280,12 @@ return [
         /*
          * Image Intervention
          */
-        'Image' => Intervention\Image\Facades\Image::class
+        'Image' => Intervention\Image\Facades\Image::class,
+
+        /*
+        * Socialite
+        */
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
     ],
 
