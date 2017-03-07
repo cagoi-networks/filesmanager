@@ -23,16 +23,16 @@ class ImageConverting{
         if($this->_validate($this->file))
         {
             $conversions = new Conversions();
-            $image = $this->file->getPath();
             foreach ($this->conversions as $conversion_type => $arguments)
             {
                 // The check on the already converted file
-                if(!$this->file->hasConvert($conversion_type, $arguments))
+                $result = $this->file->hasConvert($conversion_type, $arguments);
+                if(!$result)
                 {
                     $arg = explode('x',$arguments);
-                    if($image)
+                    if($this->file)
                     {
-                        $this->converted_file = Image::make($image)->$conversion_type(
+                        $this->converted_file = Image::make($this->file->getPath())->$conversion_type(
                             isset($arg[0]) ? $arg[0] : null,
                             isset($arg[1]) ? $arg[1] : null,
                             isset($arg[2]) ? $arg[2] : null,
@@ -45,10 +45,13 @@ class ImageConverting{
                             isset($arg[9]) ? $arg[9] : null
                         );
                     }
-                    $image = $conversions->saveResult($this->converted_file, $this->file, $conversion_type, $arguments);
+                    $this->file = $conversions->saveResult($this->converted_file, $this->file, $conversion_type, $arguments);
+                }
+                else{
+                    $this->file = $result;
                 }
             }
-            return true;
+            return $this->file;
         }
         return false;
     }

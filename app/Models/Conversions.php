@@ -22,7 +22,7 @@ class Conversions extends Model
         if($row = $this->create($data))
         {
             $converted_file->save(storage_path($this->storagePath.'/'.$row->id));
-            return $row->getPath();
+            return $row;
         }
         return null;
     }

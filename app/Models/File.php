@@ -31,7 +31,7 @@ class File extends Model
             Storage::putFileAs(
                 $this->storagePath, $file, $row->id
             );
-            return route('files.show',$row->id);
+            return $row;
         }
         return false;
     }
@@ -43,9 +43,9 @@ class File extends Model
 
     public function hasConvert($type, $arguments)
     {
-        $items = $this->conversions()->where('type', $type)->where('arguments', $arguments)->first();
-        if($items)
-            return true;
+        $item = $this->conversions()->where('type', $type)->where('arguments', $arguments)->first();
+        if($item)
+            return $item;
         return false;
     }
 
