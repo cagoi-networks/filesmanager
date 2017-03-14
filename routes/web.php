@@ -15,13 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('service/{id}/auth', 'ServiceController@service');
-
-Route::get('service/connect/{drive}', 'ServiceController@connect');
-
-Route::post('upload', 'UploadController@index');
-
-Route::get('files/{id}/{conversion?}/{arguments?}', 'FileController@show')->name('files.show');
+//Route::get('service/{id}/auth', 'ServiceController@service');
+//
+//Route::get('service/connect/{drive}', 'ServiceController@connect');
+//
+//Route::post('upload', 'UploadController@index');
+//
+//Route::get('files/{id}/{conversion?}/{arguments?}', 'FileController@show')->name('files.show');
 
 Route::group(['middleware' => 'auth'], function () {
 

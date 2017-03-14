@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Image;
-use Illuminate\Support\Facades\Response;
+use App\Acme\Image\ImageConvertionFacade;
 
 class FileController extends Controller
 {
-    public function show($id, $conversion = null, $arguments = null)
+
+    /**
+     * @param $id
+     * @param null $operations
+     * @return bool|\Illuminate\Http\Response
+     */
+    public function show($id, $operations = null)
     {
-        $result = Image::get($id, $conversion, $arguments);
-        if($result)
-            return Response::make($result['path'])->header('Content-Type', $result['mime_type']);
+        $image = new ImageConvertionFacade($id, $operations);
+        if($result = $image->process())
+            return response()->make($result->getPath(), 200, ['Content-Type' => $result->mime_type]);
         return false;
     }
 }

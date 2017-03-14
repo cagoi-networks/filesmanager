@@ -7,30 +7,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
 use App\Models\File;
-use Illuminate\Http\Request;
 
-/**
- * Class HomeController
- * @package App\Http\Controllers
- */
 class HomeController extends Controller
 {
+
     /**
-     * Create a new controller instance.
-     *
-     * @return void
+     * HomeController constructor.
      */
     public function __construct()
     {
         $this->middleware('auth');
     }
 
+
     /**
-     * Show the application dashboard.
-     *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {

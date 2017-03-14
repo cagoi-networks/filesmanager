@@ -14,11 +14,18 @@ class File extends Model
 
     protected $storagePath = 'uploads';
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function conversions()
     {
         return $this->hasMany(Conversions::class);
     }
 
+    /**
+     * @param $file
+     * @return object|bool
+     */
     public function upload($file)
     {
         $data = array();
@@ -36,14 +43,22 @@ class File extends Model
         return false;
     }
 
+    /**
+     * @return mixed
+     */
     public function getPath()
     {
         return FileFacade::get(storage_path('app/'.$this->storagePath.'/'.$this->id));
     }
 
-    public function hasConvert($type, $arguments)
+    /**
+     * @param $operation
+     * @param $arguments
+     * @return object|bool
+     */
+    public function hasConvert($operation, $arguments)
     {
-        $item = $this->conversions()->where('type', $type)->where('arguments', $arguments)->first();
+        $item = $this->conversions()->where('type', $operation)->where('arguments', $arguments)->first();
         if($item)
             return $item;
         return false;

@@ -1,12 +1,16 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Acme\Helpers;
 
 use App\Models\File;
 use Illuminate\Http\Request;
 
 class Upload {
 
+    /**
+     * @param Request $request
+     * @return bool|string
+     */
     public static function process(Request $request)
     {
         if($request->file('files')){
