@@ -31,37 +31,36 @@ class ImageConvertionFacade {
      */
     public function process()
     {
-        $converted_row = $this->row;
-
         if(!$this->_validate())
             abort(404, 'Not image file');
 
-            if(!$this->operations)
+        if(!$this->operations)
+            return $this->row;
+
+        $converted_row = $this->row;
+        $conversions = new Conversions();
+
+        foreach ($this->operations as $operation => $arguments)
+        {
+            if(!method_exists($this, $operation) )
                 abort(404, 'Url parse error');
 
-            $conversions = new Conversions();
+            // The check on the already converted file
+            $hasConvert = $this->row->hasConvert($operation, $arguments);
 
-            foreach ($this->operations as $operation => $arguments)
+            if($hasConvert)
             {
-                if(!method_exists($this, $operation) )
-                    abort(404, 'Url parse error');
-
-                // The check on the already converted file
-                $hasConvert = $this->row->hasConvert($operation, $arguments);
-
-                if($hasConvert)
-                {
-                    $converted_row = $hasConvert;
-                }
-                else
-                {
-                    $converted_file = $this->$operation($converted_row, $arguments);
-
-                    if($converted_file)
-                        $converted_row = $conversions->saveResult($converted_file, $this->row, $operation, $arguments);
-                }
+                $converted_row = $hasConvert;
             }
-            return $converted_row;
+            else
+            {
+                $converted_file = $this->$operation($converted_row, $arguments);
+
+                if($converted_file)
+                    $converted_row = $conversions->saveResult($converted_file, $this->row, $operation, $arguments);
+            }
+        }
+        return $converted_row;
     }
 
 

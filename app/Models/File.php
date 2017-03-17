@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Acme\Helpers\Uuid;
 use Illuminate\Support\Facades\Storage;
 use Jenssegers\Mongodb\Eloquent\Model as Model;
 use Illuminate\Support\Facades\File as  FileFacade;
@@ -10,7 +11,9 @@ class File extends Model
 {
     protected $table = 'files';
 
-    protected $fillable = ['name', 'extension', 'mime_type', 'size'];
+    protected $primaryKey = 'id';
+
+    protected $fillable = ['id','name', 'extension', 'mime_type', 'size'];
 
     protected $storagePath = 'uploads';
 
@@ -29,6 +32,8 @@ class File extends Model
     public function upload($file)
     {
         $data = array();
+        $uuid = new Uuid(1);
+        $data['id'] = $uuid->generate();
         $data['name'] = $file->getClientOriginalName();
         $data['extension'] = $file->getClientOriginalExtension();
         $data['mime_type'] = $file->getClientMimeType();
