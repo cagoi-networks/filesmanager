@@ -32,7 +32,7 @@ Route::get('service/connect/{drive}', 'ServiceController@connect');
 
 Route::post('upload', 'UploadController@index');
 
-Route::get('files/{id}/{pattern?}', 'FileController@show')->where(['pattern' => '^-\/[\/\-,a-zA-Z0-9]+'])->name('files.show');
+Route::get('files/{id}/{pattern?}', 'FileController@show')->where(['pattern' => '-\/[a-z0-9=,&\/]+'])->name('files.show');
 
 
 
