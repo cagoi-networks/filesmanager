@@ -3,27 +3,18 @@
 namespace App\Models;
 
 use App\Acme\Helpers\Uuid;
-use Illuminate\Support\Facades\Storage;
+use GrahamCampbell\Flysystem\Facades\Flysystem;
 use Jenssegers\Mongodb\Eloquent\Model as Model;
-use Illuminate\Support\Facades\File as  FileFacade;
 
 class File extends Model
 {
-    protected $table = 'files';
+    protected $collection = 'files';
 
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'file_id';
 
-    protected $fillable = ['id','name', 'extension', 'mime_type', 'size'];
+    protected $fillable = ['file_id','name', 'extension', 'mime_type', 'size', 'operation', 'arguments', 'original_id'];
 
-    protected $storagePath = 'uploads';
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function conversions()
-    {
-        return $this->hasMany(Conversions::class);
-    }
+    protected $storagePath = 'files';
 
     /**
      * @param $file
@@ -33,27 +24,53 @@ class File extends Model
     {
         $data = array();
         $uuid = new Uuid(1);
-        $data['id'] = $uuid->generate();
-        $data['name'] = $file->getClientOriginalName();
-        $data['extension'] = $file->getClientOriginalExtension();
-        $data['mime_type'] = $file->getClientMimeType();
-        $data['size'] = $file->getClientSize();
+        $file_id = $uuid->generate();
+
+        $stream = fopen($file->getRealPath(), 'r+');
+        Flysystem::putStream($file_id, $stream);
+        fclose($stream);
+
+        $data['file_id'] = $file_id;
+        $data['name'] = $file_id;
+        $data['mime_type'] = Flysystem::getMimetype($file_id);
+        $data['size'] = Flysystem::getSize($file_id);
+
         if($row = $this->create($data))
-        {
-            Storage::putFileAs(
-                $this->storagePath, $file, $row->id
-            );
             return $row;
-        }
+
         return false;
+    }
+
+    /**
+     * @param $converted_file
+     * @param $operation
+     * @param $arguments
+     * @return object|null
+     */
+    public function saveResult($converted_file, $operation, $arguments)
+    {
+        $data = array();
+
+        $data['file_id'] = $converted_file;
+        $data['name'] = $converted_file;
+        $data['mime_type'] = Flysystem::getMimetype($converted_file);
+        $data['size'] = Flysystem::getSize($converted_file);
+        $data['operation'] = $operation;
+        $data['arguments'] = $arguments;
+        $data['original_id'] = $this->getKey();
+
+        if($row = $this->create($data))
+            return $row;
+
+        return null;
     }
 
     /**
      * @return mixed
      */
-    public function getPath()
+    public function getFile()
     {
-        return FileFacade::get(storage_path('app/'.$this->storagePath.'/'.$this->id));
+        return Flysystem::read($this->getKey());
     }
 
     /**
@@ -63,10 +80,7 @@ class File extends Model
      */
     public function hasConvert($operation, $arguments)
     {
-        $item = $this->conversions()->where('type', $operation)->where('arguments', $arguments)->first();
-        if($item)
-            return $item;
-        return false;
+        return $this->where('operation', $operation)->where('arguments', $arguments)->where('original_id', $this->getKey())->first();
     }
 
 

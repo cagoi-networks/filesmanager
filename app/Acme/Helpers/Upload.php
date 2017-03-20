@@ -17,7 +17,7 @@ class Upload {
             $fileModel = new File();
             foreach ($request->file('files') as $file){
                 if($row = $fileModel->upload($file)){
-                    $url = route('files.show',$row->id);
+                    $url = route('files.show',$row->getKey());
                     return $url;
                 }
             }

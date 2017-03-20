@@ -3,8 +3,7 @@
 namespace App\Acme\Image;
 
 use App\Acme\Helpers\UrlParser;
-use App\Acme\Image\Handlers\ImageIntervention;
-use App\Models\Conversions;
+use App\Acme\Image\Handlers\ImageIntervention\ImageIntervention;
 use App\Models\File;
 
 class ImageConvertionFacade {
@@ -12,16 +11,15 @@ class ImageConvertionFacade {
 
     private $row;
     private $operations;
-    private $mimes = ['jpeg','jpg','png','gif'];
-
+    private $mime_types = ['jpeg','jpg','png','gif'];
     /**
      * ImageConvertionFacade constructor.
-     * @param $id
+     * @param $file_id
      * @param $operations
      */
-    public function __construct($id, $operations)
+    public function __construct($file_id, $operations)
     {
-        $this->row = File::findOrFail($id);
+        $this->row = File::findOrFail($file_id);
         $urlParser = new UrlParser($operations);
         $this->operations = $urlParser->get();
     }
@@ -37,37 +35,34 @@ class ImageConvertionFacade {
         if(!$this->operations)
             return $this->row;
 
-        $converted_row = $this->row;
-        $conversions = new Conversions();
-
         foreach ($this->operations as $operation => $arguments)
         {
             if(!method_exists($this, $operation) )
                 abort(404, 'Url parse error');
 
             // The check on the already converted file
-            $hasConvert = $this->row->hasConvert($operation, $arguments);
+            $converted_row = $this->row->hasConvert($operation, $arguments);
 
-            if($hasConvert)
+            if($converted_row)
             {
-                $converted_row = $hasConvert;
+                $this->row = $converted_row;
             }
             else
             {
-                $converted_file = $this->$operation($converted_row, $arguments);
+                $converted_file = $this->$operation($this->row, $arguments);
 
                 if($converted_file)
-                    $converted_row = $conversions->saveResult($converted_file, $this->row, $operation, $arguments);
+                    $this->row = $this->row->saveResult($converted_file, $operation, $arguments);
             }
         }
-        return $converted_row;
+        return $this->row;
     }
 
 
     /**
      * @param $row
      * @param null $arguments
-     * @return mixed
+     * @return string
      */
     public function crop($row, $arguments = null)
     {
@@ -79,7 +74,7 @@ class ImageConvertionFacade {
     /**
      * @param $row
      * @param null $arguments
-     * @return mixed
+     * @return string
      */
     public function rotate($row, $arguments = null)
     {
@@ -91,7 +86,7 @@ class ImageConvertionFacade {
     /**
      * @param $row
      * @param null $arguments
-     * @return mixed
+     * @return string
      */
     public function grayscale($row, $arguments = null)
     {
@@ -103,7 +98,7 @@ class ImageConvertionFacade {
     /**
      * @param $row
      * @param null $arguments
-     * @return mixed
+     * @return string
      */
     public function flip($row, $arguments = null)
     {
@@ -117,7 +112,7 @@ class ImageConvertionFacade {
      */
     private function _validate()
     {
-        if (in_array($this->row->extension, $this->mimes))
+        if (in_array(explode('/',$this->row->mime_type)[1], $this->mime_types))
             return true;
         return false;
     }

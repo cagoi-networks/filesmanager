@@ -8,15 +8,15 @@ class FileController extends Controller
 {
 
     /**
-     * @param $id
+     * @param $file_id
      * @param null $operations
      * @return bool|\Illuminate\Http\Response
      */
-    public function show($id, $operations = null)
+    public function show($file_id, $operations = null)
     {
-        $image = new ImageConvertionFacade($id, $operations);
+        $image = new ImageConvertionFacade($file_id, $operations);
         if($result = $image->process())
-            return response()->make($result->getPath(), 200, ['Content-Type' => $result->mime_type]);
+            return response()->make($result->getFile(), 200, ['Content-Type' => $result->mime_type]);
         return false;
     }
 }
