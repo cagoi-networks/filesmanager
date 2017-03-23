@@ -212,6 +212,11 @@ return [
         */
         Barryvdh\Cors\ServiceProvider::class,
 
+        /*
+        * HTMLPurifier
+        */
+        Mews\Purifier\PurifierServiceProvider::class,
+
     ],
 
     /*
@@ -286,6 +291,11 @@ return [
         * Socialite
         */
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+
+        /*
+        * HTMLPurifier
+        */
+        'Purifier' => Mews\Purifier\Facades\Purifier::class,
 
     ],
 

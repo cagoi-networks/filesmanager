@@ -1,4 +1,13 @@
 @extends('layouts.app')
+
+@section('js')
+<script src="{{ asset('/js/fileUploader.js') }}" type="text/javascript"></script>
+@endsection
+
+@section('css')
+<link href="{{ asset('/css/welcome.css') }}" rel="stylesheet" type="text/css" />
+@endsection
+
 @section('content')
     <div class="flex-center position-ref full-height">
         @if (Route::has('login'))

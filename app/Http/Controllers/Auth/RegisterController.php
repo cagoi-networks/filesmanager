@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
-use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * Class RegisterController
@@ -82,6 +82,7 @@ class RegisterController extends Controller
             'name'     => $data['name'],
             'email'    => $data['email'],
             'password' => bcrypt($data['password']),
+            'api_token' => str_random(60)
         ];
         if (config('auth.providers.users.field','email') === 'username' && isset($data['username'])) {
             $fields['username'] = $data['username'];

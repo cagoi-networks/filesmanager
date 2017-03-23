@@ -34,6 +34,7 @@ Route::post('upload', 'UploadController@index');
 
 Route::get('files/{file_id}/{pattern?}', 'FileController@show')->where(['pattern' => '-\/[a-z0-9=,&\/]+'])->name('files.show');
 
+Route::post('import/process', 'ImportController@process')->name('import.process');
 
 
 

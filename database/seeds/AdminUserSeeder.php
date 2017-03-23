@@ -18,8 +18,9 @@ class AdminUserSeeder extends Seeder
             factory(App\Models\User::class)->create([
                     "name" => "Admin",
                     "email" => "admin@mail.com",
-                    "password" => bcrypt(env('ADMIN_PWD', '123456'))]
-            );
+                    "password" =>bcrypt("123456"),
+                    "api_token" => str_random(60),
+            ]);
         } catch (\Illuminate\Database\QueryException $exception) {
 
         }

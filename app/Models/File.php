@@ -12,7 +12,7 @@ class File extends Model
 
     protected $primaryKey = 'file_id';
 
-    protected $fillable = ['file_id','name', 'extension', 'mime_type', 'size', 'operation', 'arguments', 'original_id'];
+    protected $fillable = ['file_id','name', 'mime_type', 'size', 'operation', 'arguments', 'original_id'];
 
     protected $storagePath = 'files';
 

@@ -8,17 +8,16 @@
 
         <title>Filesmanager</title>
 
-        <!-- Styles -->
         @include('layouts.partials.styles')
-        @yield('css')
     </head>
     <body>
         <div id="app">
-            @yield('content')
+            <div class="container">
+                @yield('content')
+            </div>
         </div>
         <footer>
             @include('layouts.partials.scripts')
-            @yield('js')
         </footer>
     </body>
 </html>
