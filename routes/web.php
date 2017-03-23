@@ -15,9 +15,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('home', 'HomeController@index');
+Route::get('myfiles', 'HomeController@files');
+
 Route::group(['middleware' => 'auth'], function () {
 
-    Route::get('home', 'HomeController@index');
+    Route::get('profle', 'ProfileController@index')->name('profile.index');
     //Please do not remove this if you want adminlte:route and adminlte:link commands to works correctly.
     #adminlte_routes
 });

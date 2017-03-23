@@ -26,7 +26,12 @@ class HomeController extends Controller
      */
     public function index()
     {
+        return view('adminlte::home');
+    }
+
+    public function files()
+    {
         $files = File::paginate(10);
-        return view('adminlte::home',['files' => $files]);
+        return view('adminlte::files',['files' => $files]);
     }
 }
