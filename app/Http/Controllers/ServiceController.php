@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 
 class ServiceController extends Controller
 {
     public function service($drive)
     {
-        // $c = Socialite::driver($drive);
-        // dd($c->user());
         return response()->json(true);
+        //return response()->json(['authenticated'=>true]);
     }
 
     public function connect($drive)

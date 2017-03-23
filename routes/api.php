@@ -12,11 +12,6 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:api');
-
 Route::group(['prefix' => 'v1','middleware' => 'auth:api'], function () {
 
     //    Route::resource('task', 'TasksController');
@@ -24,17 +19,6 @@ Route::group(['prefix' => 'v1','middleware' => 'auth:api'], function () {
     //Please do not remove this if you want adminlte:route and adminlte:link commands to works correctly.
     #adminlte_api_routes
 });
-
-
-Route::get('service/{id}/auth', 'ServiceController@service');
-
-Route::get('service/connect/{drive}', 'ServiceController@connect');
-
-Route::post('upload', 'UploadController@index');
-
-Route::get('files/{file_id}/{pattern?}', 'FileController@show')->where(['pattern' => '-\/[a-z0-9=,&\/]+'])->name('files.show');
-
-Route::post('import/process', 'ImportController@process')->name('import.process');
 
 
 

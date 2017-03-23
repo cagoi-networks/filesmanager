@@ -15,18 +15,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//Route::get('service/{id}/auth', 'ServiceController@service');
-//
-//Route::get('service/connect/{drive}', 'ServiceController@connect');
-//
-//Route::post('upload', 'UploadController@index');
-//
-//Route::get('files/{id}/{conversion?}/{arguments?}', 'FileController@show')->name('files.show');
-
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('home', 'HomeController@index');
-
     //Please do not remove this if you want adminlte:route and adminlte:link commands to works correctly.
     #adminlte_routes
 });
+
+Route::get('service/{id}/auth', 'ServiceController@service');
+
+Route::get('service/connect/{drive}', 'ServiceController@connect');
+
+Route::post('upload', 'UploadController@index');
+
+Route::get('files/{file_id}/{pattern?}', 'FileController@show')->where(['pattern' => '-\/[a-z0-9=,&\/]+'])->name('files.show');
+
+Route::post('import/process', 'ImportController@process')->name('import.process');
