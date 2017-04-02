@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Acme\Image\ImageConvertionFacade;
+use App\Acme\ConvertionFactory;
 
 class FileController extends Controller
 {
@@ -14,8 +14,8 @@ class FileController extends Controller
      */
     public function show($file_id, $operations = null)
     {
-        $image = new ImageConvertionFacade($file_id, $operations);
-        if($result = $image->process())
+        $file = ConvertionFactory::build($file_id, $operations);
+        if($result = $file->process())
             return response()->make($result->getFile(), 200, ['Content-Type' => $result->mime_type]);
         return false;
     }

@@ -5,6 +5,8 @@ namespace App\Acme\Image;
 use App\Acme\Helpers\UrlParser;
 use App\Acme\Image\Handlers\ImageIntervention\ImageIntervention;
 use App\Models\File;
+use GrahamCampbell\Flysystem\Facades\Flysystem;
+use Intervention\Image\Facades\Image;
 
 class ImageConvertionFacade {
 
@@ -35,74 +37,72 @@ class ImageConvertionFacade {
         if(!$this->operations)
             return $this->row;
 
+        // The check on the already converted file
+        $converted_row = $this->row->hasConvert($this->operations);
+
+        if($converted_row)
+           return $converted_row;
+
+        $file = Image::make(Flysystem::read($this->row->getKey()));
+
         foreach ($this->operations as $operation => $arguments)
         {
             if(!method_exists($this, $operation) )
                 abort(404, 'Url parse error');
 
-            // The check on the already converted file
-            $converted_row = $this->row->hasConvert($operation, $arguments);
-
-            if($converted_row)
-            {
-                $this->row = $converted_row;
-            }
-            else
-            {
-                $converted_file = $this->$operation($this->row, $arguments);
-
-                if($converted_file)
-                    $this->row = $this->row->saveResult($converted_file, $operation, $arguments);
-            }
+            $file = $this->$operation($file, $arguments);
         }
-        return $this->row;
+
+        if($result = $this->row->saveResult($file, $this->operations))
+            return $result;
+        return false;
     }
 
 
     /**
-     * @param $row
+     * @param $file
      * @param null $arguments
      * @return string
      */
-    public function crop($row, $arguments = null)
+    public function crop($file, $arguments = null)
     {
-        $instance = new ImageIntervention($row, $arguments);
+        $instance = new ImageIntervention($file, $arguments);
         return $instance->crop();
     }
 
 
     /**
-     * @param $row
+     * @param $file
      * @param null $arguments
      * @return string
      */
-    public function rotate($row, $arguments = null)
+    public function rotate($file, $arguments = null)
     {
-        $instance = new ImageIntervention($row, $arguments);
+        $instance = new ImageIntervention($file, $arguments);
         return $instance->rotate();
     }
 
 
     /**
-     * @param $row
+     * @param $file
      * @param null $arguments
      * @return string
      */
-    public function grayscale($row, $arguments = null)
+    public function grayscale($file, $arguments = null)
     {
-        $instance = new ImageIntervention($row, $arguments);
+        $instance = new ImageIntervention($file, $arguments);
         return $instance->grayscale();
     }
 
 
     /**
-     * @param $row
+     * @param $file
      * @param null $arguments
      * @return string
      */
-    public function flip($row, $arguments = null)
+    public function flip($file, $arguments = null)
     {
-        $instance = new ImageIntervention($row, $arguments);
+        $instance = new ImageIntervention($file, $arguments);
         return $instance->flip();
     }
 

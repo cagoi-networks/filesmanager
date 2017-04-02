@@ -42,27 +42,30 @@ class File extends Model
     }
 
     /**
-     * @param $converted_file
+     * @param $image
      * @param $operation
-     * @param $arguments
-     * @return object|null
+     * @return object|bool
      */
-    public function saveResult($converted_file, $operation, $arguments)
+    public function saveResult($file, $operation)
     {
+        $uuid = new Uuid(1);
+        $filename = $uuid->generate();
+
+        $file->encode();
+        Flysystem::put($filename, $file);
+
         $data = array();
 
-        $data['file_id'] = $converted_file;
-        $data['name'] = $converted_file;
-        $data['mime_type'] = Flysystem::getMimetype($converted_file);
-        $data['size'] = Flysystem::getSize($converted_file);
+        $data['file_id'] = $filename;
+        $data['mime_type'] = Flysystem::getMimetype($filename);
+        $data['size'] = Flysystem::getSize($filename);
         $data['operation'] = $operation;
-        $data['arguments'] = $arguments;
         $data['original_id'] = $this->getKey();
 
         if($row = $this->create($data))
             return $row;
 
-        return null;
+        return false;
     }
 
     /**
@@ -74,13 +77,16 @@ class File extends Model
     }
 
     /**
+     * Checking exist of a converted record and a file
      * @param $operation
-     * @param $arguments
      * @return object|bool
      */
-    public function hasConvert($operation, $arguments)
+    public function hasConvert($operation)
     {
-        return $this->where('operation', $operation)->where('arguments', $arguments)->where('original_id', $this->getKey())->first();
+        $row = $this->where('operation', $operation)->where('original_id', $this->getKey())->first();
+        if($row && $row->getFile())
+            return $row;
+        return false;
     }
 
 
