@@ -4,17 +4,15 @@ namespace App\Models;
 
 use App\Acme\Helpers\Uuid;
 use GrahamCampbell\Flysystem\Facades\Flysystem;
+use Illuminate\Support\Facades\Auth;
 use Jenssegers\Mongodb\Eloquent\Model as Model;
 
 class File extends Model
 {
     protected $collection = 'files';
-
     protected $primaryKey = 'file_id';
-
-    protected $fillable = ['file_id','name', 'mime_type', 'size', 'operation', 'arguments', 'original_id'];
-
-    protected $storagePath = 'files';
+    protected $fillable = ['file_id','user_id', 'project_id','name', 'mime_type', 'size', 'operation', 'arguments', 'original_id'];
+    protected $tempPath = 'temp';
 
     /**
      * @param $file
@@ -35,6 +33,9 @@ class File extends Model
         $data['mime_type'] = Flysystem::getMimetype($file_id);
         $data['size'] = Flysystem::getSize($file_id);
 
+        if(Auth::user())
+            $data['user_id'] = Auth::user()->getKey();
+
         if($row = $this->create($data))
             return $row;
 
@@ -42,17 +43,20 @@ class File extends Model
     }
 
     /**
-     * @param $image
+     * @param $file
      * @param $operation
+     * @param $type
      * @return object|bool
      */
-    public function saveResult($file, $operation)
+    public function saveResult($file, $operation, $type = null)
     {
-        $uuid = new Uuid(1);
-        $filename = $uuid->generate();
+        $filename = null;
 
-        $file->encode();
-        Flysystem::put($filename, $file);
+        if($type == 'image')
+            $filename = $this->_saveImage($file);
+
+        if($type == 'video')
+            $filename = $this->_saveVideo($file);
 
         $data = array();
 
@@ -89,5 +93,31 @@ class File extends Model
         return false;
     }
 
+    /**
+     * @param $file
+     * @return bool|string
+     */
+    private function _saveImage($file)
+    {
+        $uuid = new Uuid(1);
+        $filename = $uuid->generate();
+        $file->encode();
+        Flysystem::put($filename, $file);
 
+        return $filename;
+    }
+
+    /**
+     * @param $file
+     * @return mixed
+     */
+    private function _saveVideo($file)
+    {
+        $folder = $this->tempPath.'/'.$file;
+        $source = storage_path($folder.'/'.$file);
+        $content = file_get_contents($source);
+        Flysystem::put($file, $content);
+
+        return $file;
+    }
 }

@@ -128,4 +128,6 @@ return [
     'password'                => 'Password',
     'retrypepassword'         => 'Retype password',
     'fullname'                => 'Full Name',
+    'files'                   => 'Files',
+    'projects'                => 'Projects'
 ];

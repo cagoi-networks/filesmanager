@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Acme\ConvertionFactory;
+use App\Acme\ConversionFactory;
 
 class FileController extends Controller
 {
@@ -14,7 +14,7 @@ class FileController extends Controller
      */
     public function show($file_id, $operations = null)
     {
-        $file = ConvertionFactory::build($file_id, $operations);
+        $file = ConversionFactory::build($file_id, $operations);
         if($result = $file->process())
             return response()->make($result->getFile(), 200, ['Content-Type' => $result->mime_type]);
         return false;

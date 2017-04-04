@@ -12,6 +12,10 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('import/process', 'ImportController@process')->name('import.process');
+
+Route::get('import/status/{api_token}', 'ImportController@status')->name('import.status');
+
 Route::group(['prefix' => 'v1','middleware' => 'auth:api'], function () {
 
     //    Route::resource('task', 'TasksController');

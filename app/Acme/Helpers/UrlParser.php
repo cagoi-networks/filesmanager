@@ -17,7 +17,7 @@ class UrlParser {
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function get()
     {

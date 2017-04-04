@@ -8,12 +8,12 @@ use App\Models\File;
 use GrahamCampbell\Flysystem\Facades\Flysystem;
 use Intervention\Image\Facades\Image;
 
-class ImageConvertionFacade {
-
+class ImageConversionFacade {
 
     private $row;
     private $operations;
     private $mime_types = ['jpeg','jpg','png','gif'];
+
     /**
      * ImageConvertionFacade constructor.
      * @param $file_id
@@ -53,7 +53,7 @@ class ImageConvertionFacade {
             $file = $this->$operation($file, $arguments);
         }
 
-        if($result = $this->row->saveResult($file, $this->operations))
+        if($result = $this->row->saveResult($file, $this->operations, 'image'))
             return $result;
         return false;
     }

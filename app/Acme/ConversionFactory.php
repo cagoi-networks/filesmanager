@@ -1,24 +1,23 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: Bekturov Mirlan amanturovich@gmail.com
- * Date: 02.04.17
- * Time: 22:26
- */
-
 namespace App\Acme;
 
 use App\Models\File;
 
-class ConvertionFactory {
+class ConversionFactory {
 
+    /**
+     * @param $file_id
+     * @param $operations
+     * @return mixed
+     * @throws \Exception
+     */
     public static function build($file_id, $operations)
     {
         $file = File::findOrFail($file_id);
         $type = explode('/',$file->mime_type);
 
-        $class = 'App\\Acme\\'.ucfirst($type[0]).'\\'.ucfirst($type[0].'ConvertionFacade');
+        $class = 'App\\Acme\\'.ucfirst($type[0]).'\\'.ucfirst($type[0].'ConversionFacade');
 
         if(class_exists($class))
         {

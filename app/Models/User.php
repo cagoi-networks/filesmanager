@@ -37,4 +37,9 @@ class User extends Model implements
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function scopeFindByToken($query, $api_token)
+    {
+        return $query->where('api_token', $api_token)->first();
+    }
 }
