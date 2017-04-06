@@ -11,14 +11,14 @@ class Import extends Command
      *
      * @var string
      */
-    protected $signature = 'filesmanager-import:start';
+    protected $signature = 'filesmanager:import';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Filesmanager importing files';
+    protected $description = 'Background importing files';
 
     /**
      * Create a new command instance.

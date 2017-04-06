@@ -12,7 +12,7 @@ class ConversionFactory {
      * @return mixed
      * @throws \Exception
      */
-    public static function build($file_id, $operations)
+    public static function build($file_id)
     {
         $file = File::findOrFail($file_id);
         $type = explode('/',$file->mime_type);
@@ -20,12 +20,8 @@ class ConversionFactory {
         $class = 'App\\Acme\\'.ucfirst($type[0]).'\\'.ucfirst($type[0].'ConversionFacade');
 
         if(class_exists($class))
-        {
-            return new $class($file->file_id, $operations);
-        }
-        else
-        {
-            throw new \Exception("Class $class not found");
-        }
+            return new $class();
+
+        throw new \Exception("Class $class not found");
     }
 }

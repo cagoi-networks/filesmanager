@@ -28,7 +28,7 @@ class Docker {
     /**
      * @return bool|string
      */
-    public function ffmpeg()
+    public function webm()
     {
         $uuid = new Uuid(1);
         $filename = $uuid->generate();

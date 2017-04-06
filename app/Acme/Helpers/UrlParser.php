@@ -17,10 +17,13 @@ class UrlParser {
     }
 
     /**
-     * @return array
+     * @return array|bool
      */
     public function get()
     {
+        if(!$this->url)
+            return false;
+
         $this->url = array_filter(explode('&', preg_replace('/^-\//','', $this->url)));
         foreach ($this->url as $url)
         {

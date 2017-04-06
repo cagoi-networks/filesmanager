@@ -14,8 +14,8 @@ class FileController extends Controller
      */
     public function show($file_id, $operations = null)
     {
-        $file = ConversionFactory::build($file_id, $operations);
-        if($result = $file->process())
+        $object = ConversionFactory::build($file_id);
+        if($result = $object->process($file_id, $operations))
             return response()->make($result->getFile(), 200, ['Content-Type' => $result->mime_type]);
         return false;
     }

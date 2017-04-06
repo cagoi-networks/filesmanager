@@ -22,19 +22,17 @@
                             <table class="table table-bordered table-hover">
                                 <tbody><tr>
                                     <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Extension</th>
                                     <th>Mime</th>
-                                    <th>Size</th>
+                                    <th>Size (bytes)</th>
+                                    <th>Project</th>
                                     <th>Uploaded</th>
                                 </tr>
                                 @foreach($files as $file)
                                     <tr>
-                                        <td>{{$file->getKey()}}</td>
-                                        <td>{{$file->name}}</td>
-                                        <td>{{$file->extension}}</td>
+                                        <td><a href="{{route('files.show', $file->getKey())}}" target="_blank">{{$file->getKey()}}</a></td>
                                         <td>{{$file->mime_type}}</td>
                                         <td>{{$file->size}}</td>
+                                        <td>{{($file->project) ? $file->project->name : null}}</td>
                                         <td>{{$file->created_at}}</td>
                                     </tr>
                                 @endforeach

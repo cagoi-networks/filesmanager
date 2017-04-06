@@ -2,39 +2,36 @@
 
 namespace App\Acme\Video;
 
+use App\Acme\Helpers\UrlParser;
 use App\Acme\Video\Handlers\Docker\Docker;
 use App\Models\File;
-use GrahamCampbell\Flysystem\Facades\Flysystem;
 
 class VideoConversionFacade {
 
-    /**
-     * VideoConversionFacade constructor.
-     * @param $file_id
-     * @param $operations
-     */
-    public function __construct($file_id, $operations)
-    {
-        $this->row = File::findOrFail($file_id);
-    }
+    private $row;
+    private $operations;
 
     /**
-     * @return bool
+     * @param $file_id
+     * @param $operations
+     * @return array
      */
-    public function process()
+    public function process($file_id, $operations)
     {
+        $this->row = File::findOrFail($file_id);
+        $urlParser = new UrlParser($operations);
+        $this->operations = $urlParser->get();
+
+        if(!$this->operations)
+            return $this->row;
+
         // The check on the already converted file
-        $converted_row = $this->row->hasConvert('ffmpeg');
+        $converted_row = $this->row->hasConvert($this->operations);
 
         if($converted_row)
             return $converted_row;
-
-        $file = Flysystem::read($this->row->getKey());
-        $file = $this->ffmpeg($file, null);
-
-        if($result = $this->row->saveResult($file, 'ffmpeg', 'video'))
-            return $result;
-        return false;
+        else
+            abort(404, 'File not found');
 
     }
 
@@ -43,9 +40,9 @@ class VideoConversionFacade {
      * @param null $arguments
      * @return bool|string
      */
-    public function ffmpeg($file, $arguments = null)
+    public function webm($file, $arguments = null)
     {
-        $instance = new Docker($file, $arguments);
-        return $instance->ffmpeg();
+        $object = new Docker($file, $arguments);
+        return $object->webm();
     }
 }

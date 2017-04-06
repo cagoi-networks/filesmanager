@@ -15,22 +15,16 @@ class ImageConversionFacade {
     private $mime_types = ['jpeg','jpg','png','gif'];
 
     /**
-     * ImageConvertionFacade constructor.
      * @param $file_id
      * @param $operations
+     * @return object|bool
      */
-    public function __construct($file_id, $operations)
+    public function process($file_id, $operations)
     {
         $this->row = File::findOrFail($file_id);
         $urlParser = new UrlParser($operations);
         $this->operations = $urlParser->get();
-    }
 
-    /**
-     * @return object|bool
-     */
-    public function process()
-    {
         if(!$this->_validate())
             abort(404, 'Not image file');
 
@@ -66,8 +60,8 @@ class ImageConversionFacade {
      */
     public function crop($file, $arguments = null)
     {
-        $instance = new ImageIntervention($file, $arguments);
-        return $instance->crop();
+        $object = new ImageIntervention($file, $arguments);
+        return $object->crop();
     }
 
 
@@ -78,8 +72,8 @@ class ImageConversionFacade {
      */
     public function rotate($file, $arguments = null)
     {
-        $instance = new ImageIntervention($file, $arguments);
-        return $instance->rotate();
+        $object = new ImageIntervention($file, $arguments);
+        return $object->rotate();
     }
 
 
@@ -90,8 +84,8 @@ class ImageConversionFacade {
      */
     public function grayscale($file, $arguments = null)
     {
-        $instance = new ImageIntervention($file, $arguments);
-        return $instance->grayscale();
+        $object = new ImageIntervention($file, $arguments);
+        return $object->grayscale();
     }
 
 
@@ -102,8 +96,8 @@ class ImageConversionFacade {
      */
     public function flip($file, $arguments = null)
     {
-        $instance = new ImageIntervention($file, $arguments);
-        return $instance->flip();
+        $object = new ImageIntervention($file, $arguments);
+        return $object->flip();
     }
 
 
