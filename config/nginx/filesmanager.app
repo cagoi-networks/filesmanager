@@ -25,8 +25,8 @@ server {
     client_max_body_size 100m;
 
     set $no_cache 1;
-    if ($request_uri ~* "/files/*") {
-        set $no_cache 1;
+    if ($request_uri ~* "/files/") {
+        set $no_cache 0;
     }
 
     location ~ \.php$ {
