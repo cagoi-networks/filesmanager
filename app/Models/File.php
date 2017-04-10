@@ -39,7 +39,6 @@ class File extends Model
         fclose($stream);
 
         $data['file_id'] = $file_id;
-        $data['name'] = $file_id;
         $data['mime_type'] = Flysystem::getMimetype($file_id);
         $data['size'] = Flysystem::getSize($file_id);
 

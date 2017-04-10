@@ -13,8 +13,8 @@ const UppyOptions = 'uppyOptions';
 // Default options
 var defaultOpts = {
     Webcam: true,
-    GoogleDrive: true,
-    Dropbox: true,
+    GoogleDrive: false,
+    Dropbox: false,
     autoProceed: false
 };
 

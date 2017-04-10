@@ -37,8 +37,8 @@ class Docker {
 
         File::makeDirectory(storage_path($folder));
 
-        $process = new Process('docker run opencoconut/ffmpeg -i http://files.coconut.co.s3.amazonaws.com/test.mp4 -f webm -c:v libvpx -c:a libvorbis - > '.storage_path($folder.'/'.$filename));
-        //$process = new Process('docker run -v=`pwd`:/tmp/ffmpeg opencoconut/ffmpeg -i '.$this->file.' '.storage_path($folder.'/'.$filename));
+        //$process = new Process('docker run opencoconut/ffmpeg -i '.storage_path('files/d5a1475c-1af0-11e7-8a60-02422098368c').' -f webm -c:v libvpx -c:a libvorbis - > '.storage_path($folder.'/'.$filename));
+        $process = new Process('docker run -v=`pwd`:'.storage_path('files').' opencoconut/ffmpeg -i d5a1475c-1af0-11e7-8a60-02422098368c '.storage_path($folder.'/'.$filename));
         $process->setTimeout(1000);
         $process->run();
         if (!$process->isSuccessful()) {
